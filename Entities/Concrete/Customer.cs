@@ -1,13 +1,13 @@
-﻿using Entiteies.Abstract;
+﻿using Entities.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Entities.Concrete
 {
-    public class Customer:IEntity
+    public class Customer : IEntity
     {
-        public string CutomerId { get; set; }
+        public string Id { get; set; }
 
         public string ContactName { get; set; }
 

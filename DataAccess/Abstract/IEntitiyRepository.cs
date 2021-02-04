@@ -1,11 +1,17 @@
-﻿using System;
+﻿
+using Entities.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
 namespace DataAccess.Abstract
 {
-    public interface IEntitiyRepository<T>
+    //Generic constraint :generic kısıt
+    //class:Referans tip
+    // IEntity: IEntity veya IEntity implement eden bir nesne olabilir
+    //new() : new'lenebilir olmalı
+    public interface IEntitiyRepository<T> where T:class, IEntity,new() 
     {
         List<T> GetAll(Expression<Func<T,bool>> filter=null);
 

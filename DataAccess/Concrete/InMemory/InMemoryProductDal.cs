@@ -1,5 +1,5 @@
 ﻿using DataAccess.Abstract;
-using Entiteies.Concrete;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +17,19 @@ namespace DataAccess.Concrete.InMemory
         {
             _products = new List<Product> 
             {
-           new Product{ProductId=1, CategoryId=1, ProductName="Kitap", UnitInStock=15, UnitPrice=15},
-           new Product{ProductId=2, CategoryId=2, ProductName="Bardak", UnitInStock=500, UnitPrice=3},
-           new Product{ProductId=3, CategoryId=3, ProductName="Klavye", UnitInStock=1500, UnitPrice=2},
-           new Product{ProductId=4, CategoryId=4, ProductName="Mause", UnitInStock=150, UnitPrice=65},
-           new Product{ProductId=5, CategoryId=5, ProductName="telefon", UnitInStock=85, UnitPrice=1}
+           new Product{ProductId=1, CategoryId=1, ProductName="Kitap", UnitslnStock=15, UnitPrice=15},
+           new Product{ProductId=2, CategoryId=2, ProductName="Bardak", UnitslnStock=500, UnitPrice=3},
+           new Product{ProductId=3, CategoryId=3, ProductName="Klavye", UnitslnStock=1500, UnitPrice=2},
+           new Product{ProductId=4, CategoryId=4, ProductName="Mause", UnitslnStock=150, UnitPrice=65},
+           new Product{ProductId=5, CategoryId=5, ProductName="telefon", UnitslnStock=85, UnitPrice=1}
             };
         }
+
+        public InMemoryProductDal(List<Product> products)
+        {
+            _products = products;
+        }
+
         public void Add(Product product)
         {
             _products.Add(product);
@@ -61,7 +67,7 @@ namespace DataAccess.Concrete.InMemory
             Product productToUpdate = _products.SingleOrDefault(p=>p.ProductId==product.ProductId);
             productToUpdate.ProductId = product.ProductId;
             productToUpdate.ProductName = product.ProductName;
-            productToUpdate.UnitInStock = product.UnitInStock;
+            productToUpdate.UnitslnStock = product.UnitslnStock;
             productToUpdate.UnitPrice = product.UnitPrice;
         }
     }
