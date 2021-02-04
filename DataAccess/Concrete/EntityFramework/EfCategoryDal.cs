@@ -1,5 +1,5 @@
 ﻿using DataAccess.Abstract;
-using Entiteies.Concrete;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
