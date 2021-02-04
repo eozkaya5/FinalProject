@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entiteies.Abstract
+namespace Entities.Abstract
 {
     // IEntity implement eden class bir veri tabanı tablosudur
 
