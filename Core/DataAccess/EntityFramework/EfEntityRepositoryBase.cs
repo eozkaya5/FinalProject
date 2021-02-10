@@ -8,12 +8,12 @@ using System.Text;
 
 namespace Core.DataAccess.EntityFramework
 {
-    public class EfEntityRepositoryBase<TEntitiy, TContext> : IEntityRepository<TEntitiy>
-        where TEntitiy : class, IEntity, new() //TEntity class olmalı ve IEntity referans tiptir.
+    public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity>
+        where TEntity : class, IEntity, new() //TEntity class olmalı ve IEntity referans tiptir.
         where TContext : DbContext, new() //context; DbContextten gelir ve referans tiptir.
     {
 
-        public void Add(TEntitiy entity)
+        public void Add(TEntity entity)
         {
             // IDisponsable pattern implementation of c#
             using (TContext context = new TContext())
@@ -24,7 +24,7 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public void Delete(TEntitiy entity)
+        public void Delete(TEntity entity)
         {
             using (TContext context = new TContext())
             {
@@ -34,25 +34,25 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public TEntitiy Get(Expression<Func<TEntitiy, bool>> filter)
+        public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext context = new TContext())
             {
-                return context.Set<TEntitiy>().SingleOrDefault(filter);
+                return context.Set<TEntity>().SingleOrDefault(filter);
             }
         }
 
-        public List<TEntitiy> GetAll(Expression<Func<TEntitiy, bool>> filter = null)
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
             using (TContext context = new TContext())
             {
                 return filter == null
-                    ? context.Set<TEntitiy>().ToList()
-                    : context.Set<TEntitiy>().Where(filter).ToList();
+                    ? context.Set<TEntity>().ToList()
+                    : context.Set<TEntity>().Where(filter).ToList();
             }
         }
 
-        public void Update(TEntitiy entity)
+        public void Update(TEntity entity)
         {
             using (TContext context = new TContext())
             {
