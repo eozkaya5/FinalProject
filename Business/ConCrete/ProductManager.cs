@@ -1,6 +1,8 @@
 ﻿
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Result;
 using Core.Utilities.Result.Absract;
 using Core.Utilities.Result.Abstract;
@@ -8,10 +10,13 @@ using Core.Utilities.Result.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
+using RestSharp.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Business.ConCrete
 {
@@ -25,11 +30,8 @@ namespace Business.ConCrete
 
         public IResult Add(Product product)
         {
-            if (product.ProductName.Length<2)
-            {
-                //magic string
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
+           
+            ValidationTool.Validate(new ProductValidator(), product);
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
         }
