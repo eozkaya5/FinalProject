@@ -14,5 +14,7 @@ namespace Business.Constants
         public static string MaintenanceTime="Sistem bakımdadır";
 
         public static string ProductListed="Ürünler Listelendi.";
+
+        public static string ProductCountOfCategoryError = "";
     }
 }

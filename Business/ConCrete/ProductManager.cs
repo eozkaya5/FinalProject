@@ -3,12 +3,8 @@ using Business.Abstract;
 using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation
-using Core.Autofac.Validation;
-<<<<<<< HEAD
 using Core.CrossCuttingConcerns.Validation;
-=======
->>>>>>> Düzenleme yapıldı. Kullanılmayan kodlar silindi.
+using Core.Autofac.Validation;
 using Core.Utilities.Result;
 using Core.Utilities.Result.Absract;
 using Core.Utilities.Result.Abstract;
@@ -30,7 +26,7 @@ namespace Business.ConCrete
     {
         IProductDal _productDal; //soyut nesneyle bağlantı kurulacak
         ILogger _logger;
-        public ProductManager(IProductDal productDal,ILogger logger)
+        public ProductManager(IProductDal productDal, ILogger logger)
         {
             _productDal = productDal;
             _logger = logger;
@@ -39,15 +35,15 @@ namespace Business.ConCrete
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-<<<<<<< HEAD
+           if( CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
                 _productDal.Add(product);
-                return new SuccessResult(Messages.ProductAdded);                    
-=======
-            _productDal.Add(product);
-            return new SuccessResult(Messages.ProductAdded);
->>>>>>> Düzenleme yapıldı. Kullanılmayan kodlar silindi.
+                return new SuccessResult(Messages.ProductAdded);
+            }
+            return new ErrorResult();
+          
         }
-
+      
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
@@ -83,6 +79,19 @@ namespace Business.ConCrete
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductdetails());
         }
 
-
+        public IResult Update(Product product)
+        {
+            throw new NotImplementedException();
+        }
+        // Select count(*) from Products where CategoryId
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
+        {
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result >= 15)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            return new SuccessResult();
+        }
     }
 }
