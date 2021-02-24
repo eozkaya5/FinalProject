@@ -1,6 +1,5 @@
 ﻿
 using Business.Abstract;
-using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
@@ -20,34 +19,35 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
+using Core.Utilities.Business;
 
 namespace Business.ConCrete
 {
     public class ProductManager : IProductService
     {
         IProductDal _productDal; //soyut nesneyle bağlantı kurulacak
-        ILogger _logger;
-        public ProductManager(IProductDal productDal, ILogger logger)
+        ICategoryService _CategoryService;       
+        public ProductManager(IProductDal productDal,ICategoryService categoryService)
         {
-            _productDal = productDal;
-            _logger = logger;
+            _productDal = productDal;   
+            _CategoryService = categoryService;
+            
         }
 
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
+            IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
+                 CheckIfProductNameOfCategoryCorrect(product.ProductName), CheckIfCategoryLimitExceded());
 
-            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            if (result != null)
             {
-                if (CheckIfProductNameOfCategoryCorrect(product.ProductName).Success)
-                {
-                    _productDal.Add(product);
-                    return new SuccessResult(Messages.ProductAdded);
-                }
-
+                return result;
             }
-            return new ErrorResult();
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
         }
+
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
@@ -107,5 +107,15 @@ namespace Business.ConCrete
             }
             return new SuccessResult();
         }
+        private IResult CheckIfCategoryLimitExceded()
+        {
+            var result = _CategoryService.GetAll();
+            if (result.Data.Count < 15)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
+            return new SuccessResult();
+        }
+
     }
 }
