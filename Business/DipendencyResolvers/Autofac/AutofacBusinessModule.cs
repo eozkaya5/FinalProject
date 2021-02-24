@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
+using Business.CCS;
 using Business.ConCrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
@@ -20,6 +21,7 @@ namespace Business.DipendencyResolvers.Autofac
             // Autofac bize Aop desteği verir
             builder.RegisterType<ProductManager>().As<IProductService>().SingleInstance();// ProductManger istendiğinde IProductService' yi ver
             builder.RegisterType<EfProductDal>().As<IProductDal>().SingleInstance();
+            builder.RegisterType<FileLogger>().As<ILogger>().SingleInstance();//eğer logger isterse arka planda FileLogger ver.
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -1,17 +1,10 @@
 ﻿
 using Business.Abstract;
+using Business.CCS;
 using Business.Constants;
-<<<<<<< HEAD
-using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation;
-=======
-<<<<<<< Updated upstream
-=======
 using Business.ValidationRules.FluentValidation;
 using Core.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
->>>>>>> Stashed changes
->>>>>>> autofac
 using Core.Utilities.Result;
 using Core.Utilities.Result.Absract;
 using Core.Utilities.Result.Abstract;
@@ -32,41 +25,29 @@ namespace Business.ConCrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal; //soyut nesneyle bağlantı kurulacak
-        public ProductManager(IProductDal productDal)
+        ILogger _logger;
+        public ProductManager(IProductDal productDal,ILogger logger)
         {
             _productDal = productDal;
+            _logger = logger;
         }
 
         [ValidationAspect (typeof (ProductValidator))]
         public IResult Add(Product product)
         {
-<<<<<<< HEAD
-           
-            ValidationTool.Validate(new ProductValidator(), product);
-=======
-<<<<<<< Updated upstream
-            if (product.ProductName.Length<2)
-            {
-                //magic string
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
-=======
-           
->>>>>>> Stashed changes
->>>>>>> autofac
-            _productDal.Add(product);
-            return new SuccessResult(Messages.ProductAdded);
+                _productDal.Add(product);
+                return new SuccessResult(Messages.ProductAdded);                    
         }
 
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
-            if (DateTime.Now.Hour==1)
+            if (DateTime.Now.Hour == 1)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Product>>( _productDal.GetAll(),Messages.ProductListed);
-           
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
+
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
@@ -76,12 +57,12 @@ namespace Business.ConCrete
 
         public IDataResult<List<Product>> GetById(int productId)
         {
-            return new SuccessDataResult<List<Product>>( _productDal.GetAll(p=>p.ProductId==productId));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.ProductId == productId));
         }
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
-            return new SuccessDataResult<List<Product>>( _productDal.GetAll(p=>p.UnitPrice>=min && p.UnitPrice<=max));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max));
         }
 
         public IDataResult<List<ProductDetailDto>> GetProductDetailDtos()
@@ -90,9 +71,9 @@ namespace Business.ConCrete
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<ProductDetailDto>> (_productDal.GetProductdetails());
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductdetails());
         }
 
-      
+
     }
 }
