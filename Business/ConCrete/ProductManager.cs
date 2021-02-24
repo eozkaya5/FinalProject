@@ -1,8 +1,17 @@
 ﻿
 using Business.Abstract;
 using Business.Constants;
+<<<<<<< HEAD
 using Business.ValidationRules.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
+=======
+<<<<<<< Updated upstream
+=======
+using Business.ValidationRules.FluentValidation;
+using Core.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
+>>>>>>> Stashed changes
+>>>>>>> autofac
 using Core.Utilities.Result;
 using Core.Utilities.Result.Absract;
 using Core.Utilities.Result.Abstract;
@@ -28,10 +37,23 @@ namespace Business.ConCrete
             _productDal = productDal;
         }
 
+        [ValidationAspect (typeof (ProductValidator))]
         public IResult Add(Product product)
         {
+<<<<<<< HEAD
            
             ValidationTool.Validate(new ProductValidator(), product);
+=======
+<<<<<<< Updated upstream
+            if (product.ProductName.Length<2)
+            {
+                //magic string
+                return new ErrorResult(Messages.ProductNameInvalid);
+            }
+=======
+           
+>>>>>>> Stashed changes
+>>>>>>> autofac
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
         }
