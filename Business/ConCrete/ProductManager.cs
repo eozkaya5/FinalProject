@@ -20,6 +20,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
+using Core.Utilities.Business;
 
 namespace Business.ConCrete
 {
@@ -36,17 +37,15 @@ namespace Business.ConCrete
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
-            {
-                if (CheckIfProductNameOfCategoryCorrect(product.ProductName).Success)
-                {
-                    _productDal.Add(product);
-                    return new SuccessResult(Messages.ProductAdded);
-                }
-               
-            }
-            return new ErrorResult();
+            IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
+                 CheckIfProductNameOfCategoryCorrect(product.ProductName));
 
+            if (result != null)
+            {
+                return result;
+            }
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
         public IDataResult<List<Product>> GetAll()
