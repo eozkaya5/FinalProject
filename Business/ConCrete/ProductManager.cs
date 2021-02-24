@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
+using System.Linq;
 
 namespace Business.ConCrete
 {
@@ -35,15 +36,19 @@ namespace Business.ConCrete
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-           if( CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
             {
-                _productDal.Add(product);
-                return new SuccessResult(Messages.ProductAdded);
+                if (CheckIfProductNameOfCategoryCorrect(product.ProductName).Success)
+                {
+                    _productDal.Add(product);
+                    return new SuccessResult(Messages.ProductAdded);
+                }
+               
             }
             return new ErrorResult();
-          
+
         }
-      
+
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
@@ -90,6 +95,16 @@ namespace Business.ConCrete
             if (result >= 15)
             {
                 return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfProductNameOfCategoryCorrect(string productName)
+        {
+            var result = _productDal.GetAll(p => p.ProductName == productName).Any();//any: varmı yok mu sorgusu
+            if (result)
+            {
+                return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
             return new SuccessResult();
         }
