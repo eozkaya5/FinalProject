@@ -1,6 +1,5 @@
 ﻿
 using Business.Abstract;
-using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
@@ -27,18 +26,19 @@ namespace Business.ConCrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal; //soyut nesneyle bağlantı kurulacak
-        ILogger _logger;
-        public ProductManager(IProductDal productDal, ILogger logger)
+        ICategoryService _CategoryService;       
+        public ProductManager(IProductDal productDal,ICategoryService categoryService)
         {
-            _productDal = productDal;
-            _logger = logger;
+            _productDal = productDal;   
+            _CategoryService = categoryService;
+            
         }
 
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
             IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
-                 CheckIfProductNameOfCategoryCorrect(product.ProductName));
+                 CheckIfProductNameOfCategoryCorrect(product.ProductName), CheckIfCategoryLimitExceded());
 
             if (result != null)
             {
@@ -107,5 +107,15 @@ namespace Business.ConCrete
             }
             return new SuccessResult();
         }
+        private IResult CheckIfCategoryLimitExceded()
+        {
+            var result = _CategoryService.GetAll();
+            if (result.Data.Count < 15)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
+            return new SuccessResult();
+        }
+
     }
 }
