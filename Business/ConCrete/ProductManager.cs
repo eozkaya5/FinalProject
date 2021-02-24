@@ -3,8 +3,12 @@ using Business.Abstract;
 using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation
 using Core.Autofac.Validation;
+<<<<<<< HEAD
 using Core.CrossCuttingConcerns.Validation;
+=======
+>>>>>>> Düzenleme yapıldı. Kullanılmayan kodlar silindi.
 using Core.Utilities.Result;
 using Core.Utilities.Result.Absract;
 using Core.Utilities.Result.Abstract;
@@ -32,11 +36,16 @@ namespace Business.ConCrete
             _logger = logger;
         }
 
-        [ValidationAspect (typeof (ProductValidator))]
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
+<<<<<<< HEAD
                 _productDal.Add(product);
                 return new SuccessResult(Messages.ProductAdded);                    
+=======
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
+>>>>>>> Düzenleme yapıldı. Kullanılmayan kodlar silindi.
         }
 
         public IDataResult<List<Product>> GetAll()
