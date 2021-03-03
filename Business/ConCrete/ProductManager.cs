@@ -21,6 +21,7 @@ using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
 using Core.Utilities.Business;
 using Core.Aspect.Autfac;
+using Core.Aspect.Autofac.Caching;
 
 namespace Business.ConCrete
 {
