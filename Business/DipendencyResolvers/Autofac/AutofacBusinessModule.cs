@@ -35,7 +35,6 @@ namespace Business.DipendencyResolvers.Autofac
 
             //builder.RegisterType<FileLogger>().As<ILogger>().SingleInstance();//eğer logger isterse arka planda FileLogger ver.
 
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
