@@ -20,8 +20,10 @@ using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
 using Core.Utilities.Business;
-using Core.Aspect.Autfac;
 using Core.Aspect.Autofac.Caching;
+using Business.BusinessAspects.Autofac;
+using Core.Aspect.Transaction;
+using Core.Aspect.Autofac.Performance;
 
 namespace Business.ConCrete
 {
@@ -35,8 +37,9 @@ namespace Business.ConCrete
             _CategoryService = categoryService;
             
         }
-
-        [ValidationAspect(typeof(ProductValidator))]
+        [SecuredOperation("product.add,admin")]
+        [ValidationAspect(typeof(ProductValidator))]    
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
             IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
@@ -51,6 +54,7 @@ namespace Business.ConCrete
         }
 
         [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
@@ -119,6 +123,16 @@ namespace Business.ConCrete
             }
             return new SuccessResult();
         }
-
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Product product)
+        {
+            Add(product);
+            if (product.UnitPrice<10)
+            {
+                throw new Exception();
+            }
+            Add(product);
+            return null;
+        }
     }
 }
