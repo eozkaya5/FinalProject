@@ -20,6 +20,7 @@ using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
 using Core.Utilities.Business;
+using Core.Aspect.Autfac;
 
 namespace Business.ConCrete
 {
@@ -48,6 +49,7 @@ namespace Business.ConCrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
+        [CacheAspect]
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
