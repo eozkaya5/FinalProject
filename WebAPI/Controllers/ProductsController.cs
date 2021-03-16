@@ -50,7 +50,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        [HttpGet("getbycategory")]
+        public IActionResult GetByCategoryId(int categoryid)
+        {
+            //Eğer istek başarılı ise veriyi listelettir değilse hata mesajı göster
 
+            var result = _productService.GetByCategoryId(categoryid);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
         [HttpPost("add")]
         public IActionResult Add(Product product)
         {

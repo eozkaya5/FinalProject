@@ -20,7 +20,6 @@ using System.Text;
 using ValidationException = FluentValidation.ValidationException;
 using System.Linq;
 using Core.Utilities.Business;
-using Core.Aspect.Autfac;
 using Core.Aspect.Autofac.Caching;
 
 namespace Business.ConCrete
@@ -54,7 +53,7 @@ namespace Business.ConCrete
         public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
-            if (DateTime.Now.Hour == 1)
+            if (DateTime.Now.Hour == 4)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
@@ -62,7 +61,7 @@ namespace Business.ConCrete
 
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>> GetByCategoryId(int id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
         }

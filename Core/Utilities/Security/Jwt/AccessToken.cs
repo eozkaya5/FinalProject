@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Core.Utilities.Security.Jwt
 {
-    //Anlamsızz karakterlerden oluşan erişim anahtarıdır.
-    public class AccessToken //Erişim anahtarı
+   
+    public class AccessToken 
     {
         public string Token { get; set; }
-        public DateTime Expiration  { get; set; } //Bitiş tarihi
+        public DateTime Expiration  { get; set; } 
     }
 }
